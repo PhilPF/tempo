@@ -96,14 +96,13 @@ fun ExerciseScreen(
                         .padding(Temp0Spacing.mdAlt),
                 )
 
-                AnimatedVisibility(
+                RestCountdownOverlay(
                     visible = state.restActive,
+                    remainingSeconds = state.restRemainingSeconds,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(Temp0Spacing.mdAlt),
-                ) {
-                    RestCountdownPill(remainingSeconds = state.restRemainingSeconds)
-                }
+                )
             }
         }
 
@@ -114,6 +113,26 @@ fun ExerciseScreen(
                 PrimaryButton(text = state.logLabel, onClick = onFinishSet)
             }
         }
+    }
+}
+
+/**
+ * Wraps the rest-countdown pill's [AnimatedVisibility] in its own top-level composable so the
+ * call site has no enclosing `ColumnScope` in its lexical scope. Called directly from inside
+ * `ExerciseScreen`'s `Column { ... Box { AnimatedVisibility(...) } }`, overload resolution
+ * picks `ColumnScope.AnimatedVisibility` (via the outer Column's implicit receiver) over the
+ * plain top-level overload we actually want here, and fails because that receiver isn't the
+ * *immediate* one. Hoisting the call into a separate function removes ColumnScope from scope
+ * entirely, leaving only the unqualified overload as a candidate.
+ */
+@Composable
+private fun RestCountdownOverlay(
+    visible: Boolean,
+    remainingSeconds: Int,
+    modifier: Modifier = Modifier,
+) {
+    AnimatedVisibility(visible = visible, modifier = modifier) {
+        RestCountdownPill(remainingSeconds = remainingSeconds)
     }
 }
 
