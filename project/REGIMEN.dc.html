@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0b0c10;}
+  ::-webkit-scrollbar{display:none}
+  * { -ms-overflow-style:none; scrollbar-width:none; box-sizing:border-box; }
+  a { color: oklch(0.68 0.14 250); }
+  a:hover { color: oklch(0.78 0.14 250); }
+  input::placeholder { color: oklch(0.45 0.01 250); }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:oklch(0.12 0.01 250);font-family:'JetBrains Mono',monospace;padding:24px">
+  <div style="width:390px;height:844px;background:oklch(0.16 0.012 250);border-radius:40px;overflow:hidden;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.6);border:1px solid oklch(0.28 0.01 250)">
+
+    <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:oklch(0.9 0.01 250);font-size:13px;z-index:50">
+      <span>9:41</span>
+      <span style="letter-spacing:3px;font-family:'JetBrains Mono',monospace;font-weight:700">TEMP0</span>
+    </div>
+
+    <sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;top:44px;left:0;right:0;bottom:64px;overflow-y:auto">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div onClick="{{ openRoutines }}" style="padding:28px 24px 20px;cursor:pointer">
+          <div style="font-size:11px;letter-spacing:2px;color:oklch(0.6 0.13 250);text-transform:uppercase;margin-bottom:4px">Friday, Aug 15</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-family:'Libre Caslon Text',serif;font-size:32px;line-height:1.05;color:oklch(0.95 0.01 250);font-weight:700">{{ activeRoutine.name }}</div>
+            <div style="color:oklch(0.5 0.13 250);font-size:16px">&rsaquo;</div>
+          </div>
+        </div>
+
+        <div style="margin:20px 24px 28px;border:1px solid oklch(0.68 0.14 250 / 0.35);border-radius:24px;padding:20px;background:oklch(0.68 0.14 250 / 0.06);background-image:linear-gradient(oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px),linear-gradient(90deg, oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px);background-size:14px 14px;position:relative;overflow:hidden">
+          <div style="display:flex;align-items:stretch;gap:14px">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0">
+              <div>
+                <div style="font-size:11px;color:oklch(0.85 0.01 250);letter-spacing:1px">{{ completedCount }} / {{ exerciseCountLabel }} EXERCISES</div>
+                <div style="font-size:10px;color:oklch(0.55 0.01 250);letter-spacing:2px;margin-top:6px;text-transform:uppercase">Today's Focus</div>
+              </div>
+              <button onClick="{{ startNext }}" style="margin-top:14px;width:100%;padding:12px 10px;background:oklch(0.68 0.14 250);border:none;border-radius:12px;color:oklch(0.12 0.01 250);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.5px;font-weight:700;cursor:pointer">{{ ctaLabel }}</button>
+            </div>
+            <div style="width:70px;height:94px;overflow:hidden;position:relative;flex:none">
+              <div style="width:200px;height:268px;transform:scale(0.35);transform-origin:top left;position:relative">
+                <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+                <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+                <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+                <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+                <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+                <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+                <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+                <sc-for list="{{ todayPatches }}" as="p" hint-placeholder-count="3">
+                  <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 18px {{ p.color }};transform:{{ p.transform }}"></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:0 24px 12px;font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase">Exercises</div>
+        <div style="padding:0 24px 32px;display:flex;flex-direction:column;gap:1px">
+          <sc-for list="{{ exercises }}" as="ex" hint-placeholder-count="5">
+            <div onClick="{{ ex.open }}" style="display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid oklch(0.24 0.01 250);cursor:pointer;opacity:{{ ex.rowOpacity }}">
+              <div style="display:flex;align-items:center;gap:14px">
+                <div style="width:28px;font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ ex.numColor }}">{{ ex.marker }}</div>
+                <div>
+                  <div style="font-size:15px;color:oklch(0.92 0.01 250)">{{ ex.name }}</div>
+                  <div style="font-size:11px;color:oklch(0.55 0.01 250);margin-top:2px">{{ ex.sets }}</div>
+                </div>
+              </div>
+              <div style="color:oklch(0.5 0.01 250);font-size:16px">&rsaquo;</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="padding:28px 24px 20px">
+          <div style="font-size:11px;letter-spacing:2px;color:oklch(0.6 0.13 250);text-transform:uppercase;margin-bottom:4px">This Week</div>
+          <div style="font-family:'Libre Caslon Text',serif;font-size:32px;color:oklch(0.95 0.01 250);font-weight:700">Progress</div>
+        </div>
+
+        <div style="margin:0 24px 20px;display:flex;gap:10px">
+          <div style="flex:1;border:1px solid oklch(0.68 0.14 250 / 0.3);border-radius:18px;padding:14px;background:oklch(0.68 0.14 250 / 0.05)">
+            <div style="font-family:'Libre Caslon Text',serif;font-size:26px;color:oklch(0.68 0.14 250)">{{ stats.total }}</div>
+            <div style="font-size:9px;letter-spacing:1px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-top:4px">Sessions Logged</div>
+          </div>
+          <div style="flex:1;border:1px solid oklch(0.68 0.14 250 / 0.3);border-radius:18px;padding:14px;background:oklch(0.68 0.14 250 / 0.05)">
+            <div style="font-family:'Libre Caslon Text',serif;font-size:26px;color:oklch(0.68 0.14 250)">{{ stats.streak }}</div>
+            <div style="font-size:9px;letter-spacing:1px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-top:4px">Day Streak</div>
+          </div>
+        </div>
+
+        <div style="margin:0 24px 20px;border:1px solid oklch(0.68 0.14 250 / 0.3);border-radius:24px;padding:18px 20px;background:oklch(0.68 0.14 250 / 0.05)">
+          <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:14px">Weekly Streak</div>
+          <div style="display:flex;justify-content:space-between">
+            <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="font-size:9px;color:oklch(0.5 0.01 250);letter-spacing:1px">{{ d.label }}</div>
+                <div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ d.bg }};border:1px solid {{ d.border }};color:{{ d.fg }};font-size:12px">{{ d.glyph }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin:0 24px 20px;border:1px solid oklch(0.68 0.14 250 / 0.3);border-radius:24px;padding:20px;background:oklch(0.68 0.14 250 / 0.05);background-image:linear-gradient(oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px),linear-gradient(90deg, oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px);background-size:14px 14px">
+          <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:14px">Muscle Balance &middot; 7 Days</div>
+          <div style="display:flex;align-items:center;justify-content:center">
+            <div style="width:150px;height:201px;position:relative">
+              <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+              <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+              <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+              <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+              <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+              <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+              <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+              <sc-for list="{{ scaledTodayPatches }}" as="p" hint-placeholder-count="3">
+                <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 14px {{ p.color }};transform:{{ p.transform }}"></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:20px;margin-top:14px">
+            <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:oklch(0.6 0.01 250)"><div style="width:8px;height:8px;border-radius:50%;background:oklch(0.68 0.14 250)"></div>PRIMARY</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:oklch(0.6 0.01 250)"><div style="width:8px;height:8px;border-radius:50%;background:oklch(0.5 0.07 250 / 0.85)"></div>SECONDARY</div>
+          </div>
+        </div>
+
+        <div style="padding:0 24px 12px;font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase">Recent Sessions</div>
+        <div style="padding:0 24px 32px;display:flex;flex-direction:column;gap:1px">
+          <sc-for list="{{ recentSessions }}" as="s" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-bottom:1px solid oklch(0.24 0.01 250)">
+              <div>
+                <div style="font-size:14px;color:oklch(0.9 0.01 250)">{{ s.name }}</div>
+                <div style="font-size:10px;color:oklch(0.55 0.01 250);margin-top:2px">{{ s.date }}</div>
+              </div>
+              <div style="font-size:11px;color:oklch(0.6 0.13 250)">{{ s.duration }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="padding:28px 24px 20px">
+          <div style="font-size:11px;letter-spacing:2px;color:oklch(0.6 0.13 250);text-transform:uppercase;margin-bottom:4px">Account</div>
+          <div style="font-family:'Libre Caslon Text',serif;font-size:32px;color:oklch(0.95 0.01 250);font-weight:700">Profile</div>
+        </div>
+
+        <div style="margin:0 24px 24px;display:flex;align-items:center;gap:16px">
+          <div style="width:56px;height:56px;border-radius:50%;border:1px solid oklch(0.68 0.14 250 / 0.5);background:oklch(0.68 0.14 250 / 0.1);display:flex;align-items:center;justify-content:center;font-family:'Libre Caslon Text',serif;font-size:20px;color:oklch(0.68 0.14 250)">AM</div>
+          <div>
+            <div style="font-size:16px;color:oklch(0.92 0.01 250)">Alex Morgan</div>
+            <div style="font-size:11px;color:oklch(0.55 0.01 250);margin-top:2px">Member since Jan 2026</div>
+          </div>
+        </div>
+
+        <div style="padding:0 24px 12px;font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase">Preferences</div>
+        <div style="padding:0 24px 32px;display:flex;flex-direction:column;gap:1px">
+          <sc-for list="{{ profileRows }}" as="row" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid oklch(0.24 0.01 250)">
+              <div style="font-size:14px;color:oklch(0.85 0.01 250)">{{ row.label }}</div>
+              <div style="font-size:12px;color:oklch(0.68 0.14 250)">{{ row.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+
+    <div style="position:absolute;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-around;background:oklch(0.14 0.012 250);border-top:1px solid oklch(0.26 0.01 250)">
+      <div onClick="{{ goTab.home }}" style="font-size:10px;letter-spacing:1px;cursor:pointer;color:{{ tabColor.home }}">ROUTINES</div>
+      <div onClick="{{ goTab.progress }}" style="font-size:10px;letter-spacing:1px;cursor:pointer;color:{{ tabColor.progress }}">PROGRESS</div>
+      <div onClick="{{ goTab.profile }}" style="font-size:10px;letter-spacing:1px;cursor:pointer;color:{{ tabColor.profile }}">PROFILE</div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isRoutines }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:oklch(0.16 0.012 250);z-index:40;display:flex;flex-direction:column">
+      <div style="margin-top:44px;flex:none;display:flex;align-items:center;gap:12px;padding:14px 20px;height:52px">
+        <div onClick="{{ goHome }}" style="color:oklch(0.85 0.01 250);font-size:19px;cursor:pointer;width:20px;flex:none">&larr;</div>
+        <div style="flex:1;min-width:0;font-family:'Libre Caslon Text',serif;font-size:19px;color:oklch(0.95 0.01 250)">Your Routines</div>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;padding:8px 24px;min-height:0">
+        <sc-for list="{{ routineRows }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;border:1px solid {{ r.borderColor }};border-radius:18px;padding:12px 16px;margin-bottom:10px;background:{{ r.bg }};cursor:pointer" onClick="{{ r.select }}">
+            <div style="width:6px;height:6px;border-radius:50%;background:{{ r.dotColor }};flex:none"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;color:oklch(0.92 0.01 250)">{{ r.name }}</div>
+              <div style="font-size:10px;color:oklch(0.55 0.01 250);margin-top:4px;letter-spacing:0.5px;text-transform:uppercase">{{ r.count }} exercises</div>
+            </div>
+            <div style="width:34px;height:46px;overflow:hidden;position:relative;flex:none">
+              <div style="width:200px;height:268px;transform:scale(0.17);transform-origin:top left;position:relative">
+                <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+                <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+                <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+                <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+                <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+                <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+                <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+                <sc-for list="{{ r.patches }}" as="p" hint-placeholder-count="3">
+                  <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 12px {{ p.color }};transform:{{ p.transform }}"></div>
+                </sc-for>
+              </div>
+            </div>
+            <div onClick="{{ r.edit }}" style="padding:7px 12px;border-radius:8px;border:1px solid oklch(0.4 0.01 250);color:oklch(0.68 0.14 250);cursor:pointer;flex:none;font-size:9px;letter-spacing:1px">EDIT</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="flex:none;padding:12px 24px 28px">
+        <button onClick="{{ openBuilder }}" style="width:100%;padding:15px;background:transparent;border:1px dashed oklch(0.68 0.14 250 / 0.6);border-radius:14px;color:oklch(0.68 0.14 250);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1px;font-weight:700;cursor:pointer">+ NEW ROUTINE</button>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isExercise }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:oklch(0.16 0.012 250);z-index:40;display:flex;flex-direction:column">
+      <div style="margin-top:44px;flex:none;display:flex;align-items:center;gap:12px;padding:14px 20px 4px">
+        <div onClick="{{ goHome }}" style="color:oklch(0.85 0.01 250);font-size:19px;cursor:pointer;width:20px;flex:none">&larr;</div>
+        <div style="flex:1;min-width:0;font-family:'Libre Caslon Text',serif;font-size:19px;color:oklch(0.95 0.01 250);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentExercise.name }}</div>
+      </div>
+      <div style="flex:none;padding:14px 24px 0;display:flex;gap:5px">
+        <sc-for list="{{ exerciseTicks }}" as="t" hint-placeholder-count="5">
+          <div style="flex:1;height:4px;border-radius:2px;background:{{ t.color }}"></div>
+        </sc-for>
+      </div>
+
+      <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;margin:14px 24px;border-radius:28px;border:1px solid oklch(0.68 0.14 250 / 0.3);background:oklch(0.68 0.14 250 / 0.05);background-image:linear-gradient(oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px),linear-gradient(90deg, oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px);background-size:16px 16px;overflow:hidden">
+
+        <div style="position:absolute;top:14px;left:14px;right:14px;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:oklch(0.68 0.14 250 / 0.12);border:1px solid oklch(0.68 0.14 250 / 0.35);z-index:5;width:fit-content;max-width:calc(100% - 28px)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:oklch(0.85 0.13 250);letter-spacing:0.3px;white-space:nowrap">{{ currentExercise.sets }}</div>
+          <div style="display:flex;gap:5px">
+            <sc-for list="{{ setDots }}" as="d" hint-placeholder-count="4">
+              <div style="width:7px;height:7px;border-radius:50%;background:{{ d.color }};border:1px solid {{ d.border }}"></div>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ restActive }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;z-index:5">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:16px;background:oklch(0.68 0.14 250 / 0.12);border:1px solid oklch(0.68 0.14 250 / 0.4)">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:oklch(0.85 0.13 250);line-height:1">{{ restRemaining }}</div>
+              <div style="font-size:9px;letter-spacing:2px;color:oklch(0.68 0.14 250)">RESTING</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="width:200px;height:268px;position:relative;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.45))">
+          <div style="position:absolute;left:45px;top:254px;width:110px;height:14px;border-radius:50%;background:oklch(0.08 0.01 250 / 0.55);filter:blur(4px)"></div>
+          <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+          <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+          <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+          <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+          <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+          <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+          <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+          <sc-for list="{{ currentExercise.patches }}" as="p" hint-placeholder-count="2">
+            <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 18px {{ p.color }};transform:{{ p.transform }}"></div>
+          </sc-for>
+        </div>
+
+      </div>
+
+      <div style="flex:none;padding:16px 24px 28px">
+        <sc-if value="{{ restActive }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ skipRest }}" style="width:100%;padding:15px;background:transparent;border:1px solid oklch(0.68 0.14 250 / 0.55);border-radius:14px;color:oklch(0.68 0.14 250);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">SKIP REST</button>
+        </sc-if>
+        <sc-if value="{{ isLogging }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ completeSet }}" style="width:100%;padding:15px;background:oklch(0.68 0.14 250);border:none;border-radius:14px;color:oklch(0.12 0.01 250);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">{{ logLabel }}</button>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isBuilder }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:oklch(0.16 0.012 250);z-index:40;display:flex;flex-direction:column">
+      <div style="margin-top:44px;flex:none;display:flex;align-items:center;gap:12px;padding:14px 20px;height:52px">
+        <div onClick="{{ builderBack }}" style="color:oklch(0.85 0.01 250);font-size:19px;cursor:pointer;width:20px;flex:none">&larr;</div>
+        <div style="flex:1;min-width:0;font-family:'Libre Caslon Text',serif;font-size:19px;color:oklch(0.95 0.01 250)">{{ builderTitle }}</div>
+      </div>
+
+      <div style="flex:1;overflow-y:auto;padding:0 24px 24px;min-height:0">
+
+        <input value="{{ builderName }}" onChange="{{ setBuilderName }}" placeholder="Routine name" style="width:100%;background:transparent;border:none;border-bottom:1px solid oklch(0.68 0.14 250 / 0.5);color:oklch(0.95 0.01 250);font-family:'Libre Caslon Text',serif;font-size:24px;padding:10px 2px;outline:none;margin-bottom:20px"></input>
+
+        <sc-if value="{{ hasPicked }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-bottom:22px">
+          <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Order &amp; Volume &middot; drag to reorder</div>
+          <sc-for list="{{ builderPicked }}" as="ex" hint-placeholder-count="2">
+            <div draggable="true" onDragStart="{{ ex.onDragStart }}" onDragOver="{{ ex.onDragOver }}" onDrop="{{ ex.onDrop }}" style="display:flex;align-items:flex-start;gap:10px;border:1px solid oklch(0.68 0.14 250 / 0.25);border-radius:16px;padding:14px;margin-bottom:8px;background:oklch(0.68 0.14 250 / 0.04);cursor:grab">
+              <div style="display:grid;grid-template-columns:repeat(2,3px);grid-auto-rows:3px;gap:3px;flex:none;margin-top:5px;opacity:0.4">
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+                <div style="width:3px;height:3px;border-radius:50%;background:oklch(0.7 0.01 250)"></div>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;color:oklch(0.92 0.01 250);margin-bottom:10px">{{ ex.name }}</div>
+                <div style="display:flex;gap:18px;flex-wrap:wrap">
+                  <div>
+                    <div style="font-size:9px;letter-spacing:1px;color:oklch(0.5 0.01 250);text-transform:uppercase;margin-bottom:6px">Sets</div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div onClick="{{ ex.decSets }}" style="width:22px;height:22px;border-radius:6px;border:1px solid oklch(0.68 0.14 250 / 0.5);color:oklch(0.68 0.14 250);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px">-</div>
+                      <div style="font-size:13px;color:oklch(0.9 0.01 250);width:14px;text-align:center">{{ ex.sets }}</div>
+                      <div onClick="{{ ex.incSets }}" style="width:22px;height:22px;border-radius:6px;border:1px solid oklch(0.68 0.14 250 / 0.5);color:oklch(0.68 0.14 250);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px">+</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size:9px;letter-spacing:1px;color:oklch(0.5 0.01 250);text-transform:uppercase;margin-bottom:6px">Reps</div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div onClick="{{ ex.decReps }}" style="width:22px;height:22px;border-radius:6px;border:1px solid oklch(0.68 0.14 250 / 0.5);color:oklch(0.68 0.14 250);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px">-</div>
+                      <div style="font-size:13px;color:oklch(0.9 0.01 250);width:14px;text-align:center">{{ ex.reps }}</div>
+                      <div onClick="{{ ex.incReps }}" style="width:22px;height:22px;border-radius:6px;border:1px solid oklch(0.68 0.14 250 / 0.5);color:oklch(0.68 0.14 250);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px">+</div>
+                    </div>
+                  </div>
+                  <sc-if value="{{ ex.weighted }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="font-size:9px;letter-spacing:1px;color:oklch(0.5 0.01 250);text-transform:uppercase;margin-bottom:6px">Weight, {{ units }}</div>
+                    <input type="number" value="{{ ex.weight }}" onChange="{{ ex.setWeight }}" style="width:56px;background:transparent;border:1px solid oklch(0.68 0.14 250 / 0.4);border-radius:6px;color:oklch(0.9 0.01 250);font-family:'JetBrains Mono',monospace;font-size:13px;padding:3px 6px;outline:none"></input>
+                  </div>
+                  </sc-if>
+                </div>
+              </div>
+              <div onClick="{{ ex.remove }}" style="color:oklch(0.5 0.01 250);cursor:pointer;font-size:13px;flex:none">&times;</div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ hasPicked }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-bottom:22px;border:1px solid oklch(0.68 0.14 250 / 0.3);border-radius:24px;padding:18px;background:oklch(0.68 0.14 250 / 0.05);background-image:linear-gradient(oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px),linear-gradient(90deg, oklch(0.68 0.14 250 / 0.1) 1px, transparent 1px);background-size:14px 14px;display:flex;justify-content:center">
+          <div style="width:110px;height:147px;position:relative">
+            <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+            <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+            <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+            <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+            <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+            <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+            <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+            <sc-for list="{{ builderPatches }}" as="p" hint-placeholder-count="3">
+              <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 14px {{ p.color }};transform:{{ p.transform }}"></div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Add Exercises</div>
+        <input value="{{ builderSearch }}" onChange="{{ setBuilderSearch }}" placeholder="Search exercises..." style="width:100%;background:oklch(0.68 0.14 250 / 0.06);border:1px solid oklch(0.68 0.14 250 / 0.25);border-radius:12px;color:oklch(0.9 0.01 250);font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;outline:none;margin-bottom:6px"></input>
+
+        <sc-for list="{{ filteredLibrary }}" as="ex" hint-placeholder-count="8">
+          <div onClick="{{ ex.toggle }}" style="display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-bottom:1px solid oklch(0.24 0.01 250);cursor:pointer">
+            <div>
+              <div style="font-size:14px;color:oklch(0.92 0.01 250)">{{ ex.name }}</div>
+              <div style="font-size:10px;color:oklch(0.55 0.01 250);margin-top:2px;letter-spacing:0.5px;text-transform:uppercase">{{ ex.muscleLabel }}</div>
+            </div>
+            <div style="width:8px;height:8px;border-radius:50%;background:{{ ex.dotColor }};border:1px solid {{ ex.dotBorder }};flex:none"></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="flex:none;padding:14px 24px 28px">
+        <button onClick="{{ builderSave }}" disabled="{{ builderSaveDisabled }}" style="width:100%;padding:15px;background:oklch(0.68 0.14 250);opacity:{{ builderSaveOpacity }};border:none;border-radius:14px;color:oklch(0.12 0.01 250);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">{{ builderSaveLabel }}</button>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ACCENT = "oklch(0.68 0.14 250)";
+const ACCENT_DIM = "oklch(0.5 0.07 250 / 0.85)";
+
+const MUSCLE_PATCHES = {
+  chest: [{ top: 50, left: 65, w: 70, h: 34, radius: "14px" }],
+  shoulders: [
+    { top: 44, left: 36, w: 26, h: 26, radius: "50%" },
+    { top: 44, left: 138, w: 26, h: 26, radius: "50%" },
+  ],
+  triceps: [
+    { top: 54, left: 36, w: 20, h: 50, radius: "10px", rot: -4 },
+    { top: 54, left: 144, w: 20, h: 50, radius: "10px", rot: 4 },
+  ],
+  abs: [{ top: 100, left: 72, w: 56, h: 46, radius: "14px" }],
+  quads: [
+    { top: 134, left: 70, w: 24, h: 60, radius: "12px", rot: -2 },
+    { top: 134, left: 106, w: 24, h: 60, radius: "12px", rot: 2 },
+  ],
+  calves: [
+    { top: 196, left: 73, w: 20, h: 56, radius: "10px", rot: -2 },
+    { top: 196, left: 107, w: 20, h: 56, radius: "10px", rot: 2 },
+  ],
+};
+
+const LIBRARY = [
+  { name: "Barbell Bench Press", primary: ["chest"], secondary: ["shoulders", "triceps"], weighted: true },
+  { name: "Push-Up", primary: ["chest"], secondary: ["triceps"], weighted: false },
+  { name: "Incline Dumbbell Press", primary: ["chest"], secondary: ["shoulders"], weighted: true },
+  { name: "Overhead Press", primary: ["shoulders"], secondary: ["triceps"], weighted: true },
+  { name: "Lateral Raise", primary: ["shoulders"], secondary: [], weighted: true },
+  { name: "Triceps Pushdown", primary: ["triceps"], secondary: [], weighted: true },
+  { name: "Pull-Up", primary: ["shoulders"], secondary: ["triceps"], weighted: false },
+  { name: "Plank", primary: ["abs"], secondary: [], weighted: false },
+  { name: "Back Squat", primary: ["quads"], secondary: ["abs"], weighted: true },
+  { name: "Standing Calf Raise", primary: ["calves"], secondary: [], weighted: true },
+];
+
+const ROUTINES_SEED = [
+  { id: "push", name: "Push Day", items: [
+    { libIndex: 0, sets: 4, reps: 8, weight: 60 },
+    { libIndex: 2, sets: 3, reps: 10, weight: 22 },
+    { libIndex: 3, sets: 4, reps: 8, weight: 40 },
+    { libIndex: 4, sets: 3, reps: 15, weight: 8 },
+    { libIndex: 5, sets: 3, reps: 12, weight: 25 },
+  ]},
+  { id: "pull", name: "Pull Day", items: [
+    { libIndex: 6, sets: 4, reps: 8 },
+    { libIndex: 7, sets: 3, reps: 30 },
+  ]},
+  { id: "legs", name: "Leg Day", items: [
+    { libIndex: 8, sets: 4, reps: 10, weight: 80 },
+    { libIndex: 9, sets: 4, reps: 15, weight: 40 },
+  ]},
+];
+
+const RECENT_SESSIONS = [
+  { name: "Push Day", date: "Wed, Aug 13", duration: "48 min" },
+  { name: "Pull Day", date: "Mon, Aug 11", duration: "41 min" },
+  { name: "Leg Day", date: "Sat, Aug 9", duration: "55 min" },
+  { name: "Push Day", date: "Thu, Aug 7", duration: "44 min" },
+];
+
+function aggregatePatches(exs, scale) {
+  const level = {};
+  exs.forEach((e) => (e.secondary || []).forEach((m) => { if (!level[m]) level[m] = "secondary"; }));
+  exs.forEach((e) => (e.primary || []).forEach((m) => { level[m] = "primary"; }));
+  const list = [];
+  Object.entries(level).forEach(([m, lvl]) => (MUSCLE_PATCHES[m] || []).forEach((p) => list.push({
+    top: scale ? p.top * scale : p.top,
+    left: scale ? p.left * scale : p.left,
+    w: scale ? p.w * scale : p.w,
+    h: scale ? p.h * scale : p.h,
+    radius: p.radius,
+    color: lvl === "primary" ? ACCENT : ACCENT_DIM,
+    transform: p.rot ? `rotate(${p.rot}deg)` : "none",
+  })));
+  return list;
+}
+
+function patchesFor(ex) {
+  const list = [];
+  (ex.primary || []).forEach((m) => (MUSCLE_PATCHES[m] || []).forEach((p) => list.push({ ...p, color: ACCENT, transform: p.rot ? `rotate(${p.rot}deg)` : "none" })));
+  (ex.secondary || []).forEach((m) => (MUSCLE_PATCHES[m] || []).forEach((p) => list.push({ ...p, color: ACCENT_DIM, transform: p.rot ? `rotate(${p.rot}deg)` : "none" })));
+  return list;
+}
+
+function muscleSummary(items) {
+  const set = new Set();
+  items.forEach((it) => LIBRARY[it.libIndex].primary.forEach((m) => set.add(m)));
+  return Array.from(set).join(" \u00b7 ");
+}
+
+function setsLabel(it, units) {
+  let s = `${it.sets} \u00d7 ${it.reps}`;
+  if (it.weight) s += ` \u00b7 ${it.weight}${units}`;
+  return s;
+}
+
+class Component extends DCLogic {
+  state = {
+    screen: "home", tab: "home", selected: 0, currentSet: 1, completedExercises: [], restActive: false, restRemaining: 0,
+    routines: ROUTINES_SEED, activeRoutineId: "push", units: "kg",
+    builderSelected: [], builderConfig: {}, builderOrder: [], builderName: "", builderSearch: "", editingRoutineId: null,
+  };
+
+  componentWillUnmount() {
+    if (this.restInterval) clearInterval(this.restInterval);
+  }
+
+  startRest() {
+    if (this.restInterval) clearInterval(this.restInterval);
+    this.setState({ restActive: true, restRemaining: 60 });
+    this.restInterval = setInterval(() => {
+      this.setState((s) => {
+        if (s.restRemaining <= 1) {
+          clearInterval(this.restInterval);
+          return { restActive: false, restRemaining: 0 };
+        }
+        return { restRemaining: s.restRemaining - 1 };
+      });
+    }, 1000);
+  }
+
+  skipRest = () => {
+    if (this.restInterval) clearInterval(this.restInterval);
+    this.setState({ restActive: false, restRemaining: 0 });
+  };
+
+  openRoutines = () => this.setState({ screen: "routines" });
+
+  selectRoutine(id) {
+    this.setState({ activeRoutineId: id, completedExercises: [], selected: 0, currentSet: 1, screen: "home", tab: "home" });
+  }
+
+  openBuilder = () => {
+    this.setState({ screen: "builder", builderSelected: [], builderConfig: {}, builderOrder: [], builderName: "", builderSearch: "", editingRoutineId: null });
+  };
+
+  editRoutine(routine) {
+    const builderSelected = routine.items.map((it) => it.libIndex);
+    const builderOrder = [...builderSelected];
+    const builderConfig = {};
+    routine.items.forEach((it) => { builderConfig[it.libIndex] = { sets: it.sets, reps: it.reps, weight: it.weight || 0 }; });
+    this.setState({ screen: "builder", builderSelected, builderOrder, builderConfig, builderName: routine.name, builderSearch: "", editingRoutineId: routine.id });
+  }
+
+  builderBack = () => this.setState({ screen: "routines" });
+
+  builderSave = () => {
+    this.setState((s) => {
+      if (s.builderOrder.length === 0) return null;
+      const items = s.builderOrder.map((i) => {
+        const cfg = s.builderConfig[i] || { sets: 3, reps: 10, weight: 0 };
+        return { libIndex: i, sets: cfg.sets, reps: cfg.reps, weight: LIBRARY[i].weighted ? cfg.weight : undefined };
+      });
+      const name = s.builderName.trim() || "Untitled Routine";
+      let routines, activeRoutineId = s.activeRoutineId;
+      if (s.editingRoutineId) {
+        routines = s.routines.map((r) => (r.id === s.editingRoutineId ? { ...r, name, items } : r));
+      } else {
+        const id = "r" + Date.now();
+        routines = [...s.routines, { id, name, items }];
+        activeRoutineId = id;
+      }
+      return { routines, activeRoutineId, screen: "routines", builderSelected: [], builderConfig: {}, builderOrder: [], builderName: "", builderSearch: "", editingRoutineId: null, completedExercises: [] };
+    });
+  };
+
+  toggleLibrary(i) {
+    this.setState((s) => {
+      const has = s.builderSelected.includes(i);
+      const builderSelected = has ? s.builderSelected.filter((x) => x !== i) : [...s.builderSelected, i];
+      const builderOrder = has ? s.builderOrder.filter((x) => x !== i) : [...s.builderOrder, i];
+      const builderConfig = { ...s.builderConfig };
+      if (!has && !builderConfig[i]) builderConfig[i] = { sets: 3, reps: 10, weight: 20 };
+      return { builderSelected, builderOrder, builderConfig };
+    });
+  }
+
+  startDrag(pos) {
+    this._dragPos = pos;
+  }
+
+  dropAt(pos) {
+    if (this._dragPos === null || this._dragPos === undefined || this._dragPos === pos) return;
+    this.setState((s) => {
+      const arr = [...s.builderOrder];
+      const [moved] = arr.splice(this._dragPos, 1);
+      arr.splice(pos, 0, moved);
+      return { builderOrder: arr };
+    });
+    this._dragPos = null;
+  }
+
+  adjust(i, key, delta, min) {
+    this.setState((s) => {
+      const cur = s.builderConfig[i] || { sets: 3, reps: 10, weight: 20 };
+      const val = Math.max(min ?? 1, cur[key] + delta);
+      return { builderConfig: { ...s.builderConfig, [i]: { ...cur, [key]: val } } };
+    });
+  }
+
+  renderVals() {
+    const activeRoutineData = this.state.routines.find((r) => r.id === this.state.activeRoutineId) || this.state.routines[0];
+
+    const exercises = activeRoutineData.items.map((it, i) => {
+      const lib = LIBRARY[it.libIndex];
+      return {
+        name: lib.name,
+        primary: lib.primary,
+        secondary: lib.secondary,
+        sets: setsLabel(it, this.state.units),
+        totalSets: it.sets,
+        num: String(i + 1).padStart(2, "0"),
+        patches: patchesFor(lib),
+        open: () => this.setState({ screen: "exercise", selected: i, currentSet: 1, restActive: false }),
+        done: this.state.completedExercises.includes(i),
+      };
+    }).map((e) => ({
+      ...e,
+      marker: e.done ? "\u2713" : e.num,
+      numColor: e.done ? ACCENT : "oklch(0.5 0.01 250)",
+      rowOpacity: e.done ? 0.5 : 1,
+    }));
+
+    const exerciseCountLabel = String(exercises.length).padStart(2, "0");
+    const currentExercise = exercises[this.state.selected] || exercises[0];
+    const completedCount = this.state.completedExercises.length;
+    const nextIndex = exercises.findIndex((e) => !e.done);
+
+    const setDots = Array.from({ length: currentExercise.totalSets }, (_, i) => ({
+      color: i <= this.state.currentSet - 1 ? ACCENT : "transparent",
+      border: i <= this.state.currentSet - 1 ? ACCENT : "oklch(0.4 0.01 250)",
+    }));
+
+    const exerciseTicks = exercises.map((ex, i) => ({
+      color: i === this.state.selected ? ACCENT : ex.done ? "oklch(0.5 0.07 250 / 0.7)" : "oklch(0.28 0.01 250)",
+    }));
+
+    const weekDays = [
+      { label: "M", state: "done" }, { label: "T", state: "done" }, { label: "W", state: "rest" },
+      { label: "T", state: "done" }, { label: "F", state: "today" }, { label: "S", state: "upcoming" }, { label: "S", state: "upcoming" },
+    ].map((d) => {
+      if (d.state === "done") return { label: d.label, glyph: "\u2713", bg: "oklch(0.68 0.14 250 / 0.18)", border: "oklch(0.68 0.14 250 / 0.6)", fg: ACCENT };
+      if (d.state === "today") return { label: d.label, glyph: "\u25cf", bg: ACCENT, border: ACCENT, fg: "oklch(0.12 0.01 250)" };
+      if (d.state === "rest") return { label: d.label, glyph: "\u2013", bg: "transparent", border: "oklch(0.3 0.01 250)", fg: "oklch(0.4 0.01 250)" };
+      return { label: d.label, glyph: "", bg: "transparent", border: "oklch(0.3 0.01 250)", fg: "oklch(0.4 0.01 250)" };
+    });
+
+    const goTab = {
+      home: () => this.setState({ tab: "home", screen: "home" }),
+      progress: () => this.setState({ tab: "progress", screen: "progress" }),
+      profile: () => this.setState({ tab: "profile", screen: "profile" }),
+    };
+
+    const search = this.state.builderSearch.trim().toLowerCase();
+    const filteredLibrary = LIBRARY.map((ex, i) => {
+      const sel = this.state.builderSelected.includes(i);
+      const muscles = [...ex.primary, ...ex.secondary];
+      return {
+        ...ex,
+        i,
+        muscleLabel: muscles.join(" \u00b7 "),
+        toggle: () => this.toggleLibrary(i),
+        dotColor: sel ? ACCENT : "transparent",
+        dotBorder: sel ? ACCENT : "oklch(0.4 0.01 250)",
+      };
+    }).filter((ex) => !search || ex.name.toLowerCase().includes(search));
+
+    const builderPicked = this.state.builderOrder.map((i, pos) => {
+      const cfg = this.state.builderConfig[i] || { sets: 3, reps: 10, weight: 20 };
+      return {
+        name: LIBRARY[i].name,
+        sets: cfg.sets,
+        reps: cfg.reps,
+        weight: cfg.weight,
+        weighted: LIBRARY[i].weighted,
+        onDragStart: () => this.startDrag(pos),
+        onDragOver: (e) => e.preventDefault(),
+        onDrop: () => this.dropAt(pos),
+        incSets: () => this.adjust(i, "sets", 1),
+        decSets: () => this.adjust(i, "sets", -1),
+        incReps: () => this.adjust(i, "reps", 1),
+        decReps: () => this.adjust(i, "reps", -1),
+        setWeight: (e) => {
+          const val = Math.max(0, Number(e.target.value) || 0);
+          this.setState((s) => ({ builderConfig: { ...s.builderConfig, [i]: { ...(s.builderConfig[i] || { sets: 3, reps: 10 }), weight: val } } }));
+        },
+        remove: () => this.toggleLibrary(i),
+      };
+    });
+
+    const selectedLibExercises = this.state.builderOrder.map((i) => LIBRARY[i]);
+    const builderPatches = aggregatePatches(selectedLibExercises, 0.5);
+    const builderSaveDisabled = this.state.builderOrder.length === 0;
+
+    const routineRows = this.state.routines.map((r) => ({
+      name: r.name,
+      count: r.items.length,
+      patches: aggregatePatches(r.items.map((it) => LIBRARY[it.libIndex])),
+      dotColor: r.id === this.state.activeRoutineId ? ACCENT : "transparent",
+      borderColor: r.id === this.state.activeRoutineId ? "oklch(0.68 0.14 250 / 0.6)" : "oklch(0.3 0.01 250)",
+      bg: r.id === this.state.activeRoutineId ? "oklch(0.68 0.14 250 / 0.08)" : "transparent",
+      select: () => this.selectRoutine(r.id),
+      edit: (e) => { e.stopPropagation(); this.editRoutine(r); },
+    }));
+
+    return {
+      exercises,
+      exerciseCountLabel,
+      activeRoutine: activeRoutineData,
+      todayPatches: aggregatePatches(activeRoutineData.items.map((it) => LIBRARY[it.libIndex])),
+      scaledTodayPatches: aggregatePatches(activeRoutineData.items.map((it) => LIBRARY[it.libIndex]), 0.75),
+      currentExercise,
+      completedCount,
+      ctaLabel: completedCount >= exercises.length ? "SESSION COMPLETE" : completedCount === 0 ? "BEGIN SESSION" : "CONTINUE SESSION",
+      isMain: this.state.screen === "home" || this.state.screen === "progress" || this.state.screen === "profile",
+      isHome: this.state.screen === "home",
+      isProgress: this.state.screen === "progress",
+      isProfile: this.state.screen === "profile",
+      isExercise: this.state.screen === "exercise",
+      isBuilder: this.state.screen === "builder",
+      isRoutines: this.state.screen === "routines",
+      isLogging: !this.state.restActive,
+      restActive: this.state.restActive,
+      restRemaining: this.state.restRemaining,
+      skipRest: this.skipRest,
+      setDots,
+      exerciseTicks,
+      weekDays,
+      goTab,
+      openRoutines: this.openRoutines,
+      routineRows,
+      openBuilder: this.openBuilder,
+      builderBack: this.builderBack,
+      builderSave: this.builderSave,
+      builderTitle: this.state.editingRoutineId ? "Edit Routine" : "New Routine",
+      hasPicked: this.state.builderOrder.length > 0,
+      builderSaveDisabled,
+      builderSaveOpacity: builderSaveDisabled ? 0.4 : 1,
+      builderSaveLabel: this.state.editingRoutineId ? "SAVE CHANGES" : "SAVE ROUTINE",
+      filteredLibrary,
+      builderSearch: this.state.builderSearch,
+      setBuilderSearch: (e) => this.setState({ builderSearch: e.target.value }),
+      builderPicked,
+      builderPatches,
+      builderName: this.state.builderName,
+      setBuilderName: (e) => this.setState({ builderName: e.target.value }),
+      tabColor: {
+        home: this.state.tab === "home" ? ACCENT : "oklch(0.5 0.01 250)",
+        progress: this.state.tab === "progress" ? ACCENT : "oklch(0.5 0.01 250)",
+        profile: this.state.tab === "profile" ? ACCENT : "oklch(0.5 0.01 250)",
+      },
+      units: this.state.units,
+      profileRows: [
+        { label: "Rest Timer Duration", value: "60s" },
+        { label: "Units", value: this.state.units },
+        { label: "Notifications", value: "On" },
+      ],
+      stats: { total: "24", streak: "5" },
+      recentSessions: RECENT_SESSIONS,
+      goHome: () => this.setState({ screen: this.state.tab }),
+      startNext: () => this.setState({ screen: "exercise", selected: nextIndex >= 0 ? nextIndex : 0, currentSet: 1 }),
+      logLabel: this.state.currentSet < currentExercise.totalSets ? "FINISH SET" : nextIndex >= 0 && nextIndex !== this.state.selected ? "FINISH EXERCISE" : "FINISH SESSION",
+      completeSet: () => {
+        const total = currentExercise.totalSets;
+        const selected = this.state.selected;
+        if (this.state.currentSet < total) {
+          this.setState((s) => ({ currentSet: s.currentSet + 1 }));
+          this.startRest();
+        } else {
+          this.setState((s) => {
+            const done = s.completedExercises.includes(selected) ? s.completedExercises : [...s.completedExercises, selected];
+            const next = exercises.findIndex((e, i) => i !== selected && !done.includes(i));
+            if (next >= 0) return { completedExercises: done, selected: next, currentSet: 1, screen: "exercise" };
+            return { completedExercises: done, screen: "home", tab: "home", currentSet: 1 };
+          });
+        }
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

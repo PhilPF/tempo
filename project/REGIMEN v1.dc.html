@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#0b0c10;}
+  ::-webkit-scrollbar{display:none}
+  * { -ms-overflow-style:none; scrollbar-width:none; box-sizing:border-box; }
+  @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;padding:24px">
+  <div style="width:390px;height:844px;background:oklch(0.16 0.012 250);border-radius:40px;overflow:hidden;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.6);border:1px solid oklch(0.28 0.01 250)">
+
+    <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:oklch(0.9 0.01 250);font-size:13px;z-index:50">
+      <span>9:41</span>
+      <span style="letter-spacing:1px">REGIMEN</span>
+    </div>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;top:44px;left:0;right:0;bottom:0;overflow-y:auto">
+
+      <div style="padding:28px 24px 16px">
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.6 0.13 250);text-transform:uppercase;margin-bottom:4px">Friday, Aug 15</div>
+        <div style="font-family:'Libre Caslon Text',serif;font-size:38px;line-height:1.05;color:oklch(0.95 0.01 250);font-weight:700">Today's<br>Session</div>
+      </div>
+
+      <div style="margin:20px 24px 28px;border:1px solid oklch(0.3 0.01 250);border-radius:4px;padding:20px;background:oklch(0.19 0.012 250)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+          <div style="font-family:'Libre Caslon Text',serif;font-size:22px;color:oklch(0.95 0.01 250)">Push Day</div>
+          <div style="font-size:11px;color:oklch(0.6 0.01 250);letter-spacing:1px">05 / EXERCISES</div>
+        </div>
+        <div style="font-size:12px;color:oklch(0.65 0.01 250);line-height:1.6">Chest &middot; Shoulders &middot; Triceps</div>
+        <button style="margin-top:16px;width:100%;padding:13px;background:oklch(0.6 0.13 250);border:none;border-radius:2px;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">BEGIN SESSION &rarr;</button>
+      </div>
+
+      <div style="padding:0 24px 12px;font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase">Exercises</div>
+      <div style="padding:0 24px 32px;display:flex;flex-direction:column;gap:1px">
+        <sc-for list="{{ exercises }}" as="ex" hint-placeholder-count="5">
+          <div onClick="{{ ex.open }}" style="display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid oklch(0.24 0.01 250);cursor:pointer">
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:28px;font-family:'Fragment Mono',monospace;font-size:12px;color:oklch(0.5 0.01 250)">{{ ex.num }}</div>
+              <div>
+                <div style="font-size:15px;color:oklch(0.92 0.01 250)">{{ ex.name }}</div>
+                <div style="font-size:11px;color:oklch(0.55 0.01 250);margin-top:2px">{{ ex.sets }}</div>
+              </div>
+            </div>
+            <div style="color:oklch(0.5 0.01 250);font-size:16px">&rsaquo;</div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+
+    <div style="position:absolute;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-around;background:oklch(0.14 0.012 250);border-top:1px solid oklch(0.26 0.01 250)">
+      <div style="font-size:10px;letter-spacing:1px;color:oklch(0.85 0.13 250)">ROUTINES</div>
+      <div style="font-size:10px;letter-spacing:1px;color:oklch(0.5 0.01 250)">PROGRESS</div>
+      <div style="font-size:10px;letter-spacing:1px;color:oklch(0.5 0.01 250)">PROFILE</div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:oklch(0.16 0.012 250);z-index:40;display:flex;flex-direction:column">
+      <div style="padding-top:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:20px;padding-right:20px;height:56px">
+        <div onClick="{{ goHome }}" style="color:oklch(0.85 0.01 250);font-size:20px;cursor:pointer;width:32px">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">{{ currentExercise.num }} / 05</div>
+      </div>
+
+      <div style="flex:none;padding:4px 24px 12px">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:30px;color:oklch(0.95 0.01 250);line-height:1.1">{{ currentExercise.name }}</div>
+        <div style="font-size:12px;color:oklch(0.6 0.13 250);letter-spacing:1px;margin-top:6px">{{ currentExercise.sets }}</div>
+      </div>
+
+      <div ref="{{ mannequinRef }}" onPointerDown="{{ onDragStart }}" style="flex:1;position:relative;margin:8px 20px 0;background:radial-gradient(ellipse at 50% 35%, oklch(0.22 0.012 250), oklch(0.14 0.01 250));border-radius:6px;border:1px solid oklch(0.28 0.01 250);overflow:hidden;cursor:grab;touch-action:none">
+        <div style="position:absolute;top:12px;left:14px;font-size:10px;letter-spacing:1.5px;color:oklch(0.5 0.01 250)">DRAG TO ROTATE</div>
+        <div style="position:absolute;inset:0;perspective:900px;display:flex;align-items:center;justify-content:center">
+          {{ mannequin }}
+        </div>
+        <div style="position:absolute;bottom:12px;left:14px;right:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <sc-for list="{{ muscleLegend }}" as="m" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="width:8px;height:8px;border-radius:50%;background:{{ m.color }}"></div>
+              <div style="font-size:9.5px;letter-spacing:0.5px;color:oklch(0.7 0.01 250)">{{ m.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="flex:none;padding:18px 24px 28px">
+        <button onClick="{{ startSession }}" style="width:100%;padding:15px;background:oklch(0.6 0.13 250);border:none;border-radius:2px;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">START EXERCISE &rarr;</button>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:oklch(0.16 0.012 250);z-index:40;display:flex;flex-direction:column">
+      <div style="padding-top:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:20px;padding-right:20px;height:56px">
+        <div onClick="{{ goDetail }}" style="color:oklch(0.85 0.01 250);font-size:20px;cursor:pointer;width:32px">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">SET {{ currentSet }} / {{ totalSets }}</div>
+      </div>
+
+      <div style="flex:none;padding:0 24px 8px;font-family:'Libre Caslon Text',serif;font-size:24px;color:oklch(0.95 0.01 250)">{{ currentExercise.name }}</div>
+
+      <div ref="{{ mannequinRef2 }}" onPointerDown="{{ onDragStart }}" style="flex:1;position:relative;margin:8px 20px 0;background:radial-gradient(ellipse at 50% 35%, oklch(0.22 0.012 250), oklch(0.14 0.01 250));border-radius:6px;border:1px solid oklch(0.28 0.01 250);overflow:hidden;cursor:grab;touch-action:none;max-height:280px">
+        <div style="position:absolute;inset:0;perspective:900px;display:flex;align-items:center;justify-content:center">
+          {{ mannequin }}
+        </div>
+      </div>
+
+      <div style="flex:none;padding:20px 24px;display:flex;gap:14px">
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;letter-spacing:1.5px;color:oklch(0.55 0.01 250);margin-bottom:6px">WEIGHT</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+            <div onClick="{{ decWeight }}" style="width:30px;height:30px;border:1px solid oklch(0.35 0.01 250);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:oklch(0.8 0.01 250)">&minus;</div>
+            <div style="font-size:20px;color:oklch(0.95 0.01 250);width:44px">{{ weight }}</div>
+            <div onClick="{{ incWeight }}" style="width:30px;height:30px;border:1px solid oklch(0.35 0.01 250);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:oklch(0.8 0.01 250)">+</div>
+          </div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;letter-spacing:1.5px;color:oklch(0.55 0.01 250);margin-bottom:6px">REPS</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+            <div onClick="{{ decReps }}" style="width:30px;height:30px;border:1px solid oklch(0.35 0.01 250);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:oklch(0.8 0.01 250)">&minus;</div>
+            <div style="font-size:20px;color:oklch(0.95 0.01 250);width:44px">{{ reps }}</div>
+            <div onClick="{{ incReps }}" style="width:30px;height:30px;border:1px solid oklch(0.35 0.01 250);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:oklch(0.8 0.01 250)">+</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:none;padding:0 24px 28px">
+        <button onClick="{{ completeSet }}" style="width:100%;padding:15px;background:oklch(0.6 0.13 250);border:none;border-radius:2px;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:13px;letter-spacing:1px;font-weight:700;cursor:pointer">LOG SET &rarr;</button>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PRIMARY = "oklch(0.68 0.19 29)";
+const SECONDARY = "oklch(0.5 0.13 29)";
+const BASE = "oklch(0.42 0.02 250)";
+
+const PART_DEFS = [
+  { key: "head", top: -100, left: 0, w: 34, h: 34, z: 0, radius: "50%" },
+  { key: "neck", top: -78, left: 0, w: 14, h: 12, z: 0, radius: 4 },
+  { key: "torso-chest", top: -56, left: 0, w: 70, h: 38, z: 0, radius: 10 },
+  { key: "torso-abs", top: -16, left: 0, w: 56, h: 38, z: 0, radius: 10 },
+  { key: "shoulder-L", top: -58, left: -42, w: 16, h: 16, z: 8, radius: "50%" },
+  { key: "shoulder-R", top: -58, left: 42, w: 16, h: 16, z: 8, radius: "50%" },
+  { key: "upperarm-L", top: -30, left: -47, w: 16, h: 50, z: 8, radius: 8, rot: -6 },
+  { key: "upperarm-R", top: -30, left: 47, w: 16, h: 50, z: 8, radius: 8, rot: 6 },
+  { key: "forearm-L", top: 15, left: -51, w: 14, h: 46, z: 8, radius: 7, rot: -3 },
+  { key: "forearm-R", top: 15, left: 51, w: 14, h: 46, z: 8, radius: 7, rot: 3 },
+  { key: "thigh-L", top: 44, left: -18, w: 22, h: 58, z: -4, radius: 10 },
+  { key: "thigh-R", top: 44, left: 18, w: 22, h: 58, z: -4, radius: 10 },
+  { key: "calf-L", top: 98, left: -18, w: 18, h: 54, z: -4, radius: 8 },
+  { key: "calf-R", top: 98, left: 18, w: 18, h: 54, z: -4, radius: 8 },
+];
+
+const MUSCLE_PARTS = {
+  chest: ["torso-chest"],
+  shoulders: ["shoulder-L", "shoulder-R"],
+  triceps: ["upperarm-L", "upperarm-R"],
+  abs: ["torso-abs"],
+  quads: ["thigh-L", "thigh-R"],
+  calves: ["calf-L", "calf-R"],
+};
+
+const EXERCISES = [
+  { name: "Barbell Bench Press", sets: "4 sets x 8 reps", totalSets: 4, primary: ["chest"], secondary: ["shoulders", "triceps"] },
+  { name: "Incline Dumbbell Press", sets: "3 sets x 10 reps", totalSets: 3, primary: ["chest"], secondary: ["shoulders"] },
+  { name: "Overhead Press", sets: "4 sets x 8 reps", totalSets: 4, primary: ["shoulders"], secondary: ["triceps"] },
+  { name: "Lateral Raise", sets: "3 sets x 15 reps", totalSets: 3, primary: ["shoulders"], secondary: [] },
+  { name: "Triceps Pushdown", sets: "3 sets x 12 reps", totalSets: 3, primary: ["triceps"], secondary: [] },
+];
+
+const MUSCLE_LABELS = { chest: "CHEST", shoulders: "SHOULDERS", triceps: "TRICEPS", abs: "ABS", quads: "QUADS", calves: "CALVES" };
+
+class Component extends DCLogic {
+  state = {
+    screen: "home",
+    selected: 0,
+    rotX: -6,
+    rotY: 18,
+    weight: 135,
+    reps: 8,
+    currentSet: 1,
+  };
+
+  handleMove = (e) => {
+    const dx = e.clientX - this._lastX;
+    const dy = e.clientY - this._lastY;
+    this._lastX = e.clientX;
+    this._lastY = e.clientY;
+    this.setState((s) => ({
+      rotY: s.rotY + dx * 0.5,
+      rotX: Math.max(-40, Math.min(40, s.rotX - dy * 0.5)),
+    }));
+  };
+
+  handleUp = () => {
+    window.removeEventListener("pointermove", this.handleMove);
+    window.removeEventListener("pointerup", this.handleUp);
+  };
+
+  onDragStart = (e) => {
+    this._lastX = e.clientX;
+    this._lastY = e.clientY;
+    window.addEventListener("pointermove", this.handleMove);
+    window.addEventListener("pointerup", this.handleUp);
+  };
+
+  buildMannequin(exercise) {
+    const highlighted = {};
+    (exercise.primary || []).forEach((m) => (MUSCLE_PARTS[m] || []).forEach((p) => (highlighted[p] = PRIMARY)));
+    (exercise.secondary || []).forEach((m) => (MUSCLE_PARTS[m] || []).forEach((p) => { if (!highlighted[p]) highlighted[p] = SECONDARY; }));
+
+    const parts = PART_DEFS.map((p) =>
+      React.createElement("div", {
+        key: p.key,
+        style: {
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: p.w,
+          height: p.h,
+          borderRadius: p.radius,
+          background: highlighted[p.key] || BASE,
+          boxShadow: highlighted[p.key] ? `0 0 14px ${highlighted[p.key]}` : "inset 0 0 0 1px oklch(0.3 0.01 250)",
+          transform: `translate3d(calc(-50% + ${p.left}px), calc(-50% + ${p.top}px), ${p.z}px) rotate(${p.rot || 0}deg)`,
+          transition: "background 0.3s, box-shadow 0.3s",
+        },
+      })
+    );
+
+    return React.createElement(
+      "div",
+      { style: { width: 220, height: 280, position: "relative", transformStyle: "preserve-3d", transform: `rotateX(${this.state.rotX}deg) rotateY(${this.state.rotY}deg)` } },
+      parts
+    );
+  }
+
+  renderVals() {
+    const exercises = EXERCISES.map((e, i) => ({ ...e, num: String(i + 1).padStart(2, "0"), open: () => this.setState({ screen: "detail", selected: i }) }));
+    const currentExercise = exercises[this.state.selected];
+    const muscleLegend = [
+      ...(currentExercise.primary || []).map((m) => ({ label: MUSCLE_LABELS[m], color: PRIMARY })),
+      ...(currentExercise.secondary || []).map((m) => ({ label: MUSCLE_LABELS[m], color: SECONDARY })),
+    ];
+
+    return {
+      exercises,
+      currentExercise,
+      isHome: this.state.screen === "home",
+      isDetail: this.state.screen === "detail",
+      isSession: this.state.screen === "session",
+      goHome: () => this.setState({ screen: "home" }),
+      goDetail: () => this.setState({ screen: "detail" }),
+      startSession: () => this.setState({ screen: "session", currentSet: 1 }),
+      mannequin: this.buildMannequin(currentExercise),
+      muscleLegend,
+      mannequinRef: () => {},
+      mannequinRef2: () => {},
+      onDragStart: this.onDragStart,
+      currentSet: this.state.currentSet,
+      totalSets: currentExercise.totalSets,
+      weight: this.state.weight,
+      reps: this.state.reps,
+      incWeight: () => this.setState((s) => ({ weight: s.weight + 5 })),
+      decWeight: () => this.setState((s) => ({ weight: Math.max(0, s.weight - 5) })),
+      incReps: () => this.setState((s) => ({ reps: s.reps + 1 })),
+      decReps: () => this.setState((s) => ({ reps: Math.max(0, s.reps - 1) })),
+      completeSet: () =>
+        this.setState((s) => {
+          if (s.currentSet >= currentExercise.totalSets) return { screen: "detail" };
+          return { currentSet: s.currentSet + 1 };
+        }),
+    };
+  }
+}
+</script>
+</body>
+</html>

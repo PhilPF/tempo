@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:oklch(0.1 0.01 250);}
+  ::-webkit-scrollbar{display:none}
+  * { -ms-overflow-style:none; scrollbar-width:none; box-sizing:border-box; }
+</style>
+</helmet>
+<div style="display:flex;justify-content:center;font-family:'Fragment Mono',monospace">
+  <div style="width:390px;background:oklch(0.16 0.012 250);color:oklch(0.93 0.01 250);position:relative">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div style="padding:56px 28px 18px;text-align:center;border-bottom:1px solid oklch(0.28 0.01 250)">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:21px;letter-spacing:5px">REGIMEN</div>
+        <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);margin-top:8px;text-transform:uppercase">Friday, August 15</div>
+      </div>
+
+      <div style="padding:36px 28px 20px">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:42px;line-height:1.05">Push Day</div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:oklch(0.68 0.14 250);margin-top:12px;text-transform:uppercase">Chest &middot; Shoulders &middot; Triceps</div>
+        <div style="font-size:10.5px;letter-spacing:1.5px;color:{{ progressColor }};margin-top:14px;text-transform:uppercase">{{ completedCount }} / 5 Complete</div>
+      </div>
+
+      <div style="padding:0 28px">
+        <sc-for list="{{ exercises }}" as="ex" hint-placeholder-count="5">
+          <div onClick="{{ ex.open }}" style="display:flex;align-items:baseline;justify-content:space-between;padding:18px 0;border-top:1px solid oklch(0.24 0.01 250);cursor:pointer;opacity:{{ ex.rowOpacity }}">
+            <div style="display:flex;align-items:baseline;gap:16px">
+              <div style="font-family:'Libre Caslon Text',serif;font-style:italic;font-size:20px;color:{{ ex.numColor }};width:26px">{{ ex.marker }}</div>
+              <div style="font-family:'Libre Caslon Text',serif;font-size:17px">{{ ex.name }}</div>
+            </div>
+            <div style="font-size:10.5px;color:oklch(0.55 0.01 250);letter-spacing:0.5px;white-space:nowrap">{{ ex.sets }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="padding:32px 28px 56px">
+        <div onClick="{{ startNext }}" style="border-top:1px solid oklch(0.32 0.01 250);border-bottom:1px solid oklch(0.32 0.01 250);padding:17px 0;text-align:center;font-size:12px;letter-spacing:2.5px;color:oklch(0.68 0.14 250);cursor:pointer">{{ ctaLabel }}</div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid oklch(0.24 0.01 250)">
+        <div onClick="{{ goHome }}" style="font-size:16px;cursor:pointer">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">{{ currentExercise.num }} / 05</div>
+      </div>
+
+      <div style="padding:32px 24px 0">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:33px;line-height:1.1">{{ currentExercise.name }}</div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:oklch(0.68 0.14 250);margin-top:10px;text-transform:uppercase">{{ currentExercise.sets }}</div>
+        <div style="font-size:10.5px;letter-spacing:1px;color:oklch(0.55 0.01 250);margin-top:6px">Last time: {{ currentExercise.last }}</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;padding:26px 24px 8px">
+        <div style="width:200px;height:268px;position:relative;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.45))">
+          <div style="position:absolute;left:45px;top:254px;width:110px;height:14px;border-radius:50%;background:oklch(0.08 0.01 250 / 0.55);filter:blur(4px)"></div>
+          <div style="position:absolute;top:44px;left:57px;width:86px;height:60px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+          <div style="position:absolute;top:96px;left:67px;width:66px;height:64px;border-radius:24px;background:oklch(0.32 0.02 250)"></div>
+          <div style="position:absolute;top:50px;left:38px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(-4deg)"></div>
+          <div style="position:absolute;top:50px;left:142px;width:20px;height:130px;border-radius:10px;background:oklch(0.32 0.02 250);transform:rotate(4deg)"></div>
+          <div style="position:absolute;top:130px;left:72px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(-2deg)"></div>
+          <div style="position:absolute;top:130px;left:102px;width:26px;height:140px;border-radius:13px;background:oklch(0.32 0.02 250);transform:rotate(2deg)"></div>
+          <div style="position:absolute;top:6px;left:80px;width:40px;height:40px;border-radius:50%;background:oklch(0.32 0.02 250)"></div>
+          <sc-for list="{{ currentExercise.patches }}" as="p" hint-placeholder-count="2">
+            <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:0 0 18px {{ p.color }};transform:{{ p.transform }}"></div>
+          </sc-for>
+        </div>
+        <div style="font-family:'Libre Caslon Text',serif;font-style:italic;font-size:12.5px;color:oklch(0.6 0.01 250);text-align:center;max-width:260px;margin-top:16px;line-height:1.5">{{ currentExercise.caption }}</div>
+      </div>
+
+      <div style="padding:30px 24px 56px">
+        <button onClick="{{ startSession }}" style="width:100%;padding:17px;background:oklch(0.68 0.14 250);border:none;border-radius:0;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:12.5px;letter-spacing:2px;font-weight:700;cursor:pointer">START EXERCISE</button>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid oklch(0.24 0.01 250)">
+        <div onClick="{{ goDetail }}" style="font-size:16px;cursor:pointer">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">SET {{ currentSet }} / {{ totalSets }}</div>
+      </div>
+
+      <div style="display:flex;gap:5px;padding:14px 24px 0">
+        <sc-for list="{{ setDots }}" as="d" hint-placeholder-count="4">
+          <div style="flex:1;height:3px;background:{{ d.color }}"></div>
+        </sc-for>
+      </div>
+
+      <div style="padding:20px 24px 0;font-family:'Libre Caslon Text',serif;font-size:24px">{{ currentExercise.name }}</div>
+
+      <sc-if value="{{ restActive }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px">
+          <div style="font-size:10px;letter-spacing:3px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:14px">Resting</div>
+          <div style="font-family:'Libre Caslon Text',serif;font-size:64px;color:oklch(0.68 0.14 250)">{{ restRemaining }}</div>
+          <div onClick="{{ skipRest }}" style="margin-top:24px;font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);border-bottom:1px solid oklch(0.4 0.01 250);padding-bottom:2px;cursor:pointer">SKIP REST</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLogging }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;padding:28px 24px 8px">
+          <div style="flex:1;text-align:center;border-right:1px solid oklch(0.28 0.01 250)">
+            <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Weight</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:16px">
+              <div onClick="{{ decWeight }}" style="font-size:16px;padding:10px 8px;cursor:pointer;color:oklch(0.6 0.01 250)">&minus;</div>
+              <div style="font-family:'Libre Caslon Text',serif;font-size:30px;width:56px;text-align:center">{{ weight }}</div>
+              <div onClick="{{ incWeight }}" style="font-size:16px;padding:10px 8px;cursor:pointer;color:oklch(0.6 0.01 250)">+</div>
+            </div>
+          </div>
+          <div style="flex:1;text-align:center">
+            <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Reps</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:16px">
+              <div onClick="{{ decReps }}" style="font-size:16px;padding:10px 8px;cursor:pointer;color:oklch(0.6 0.01 250)">&minus;</div>
+              <div style="font-family:'Libre Caslon Text',serif;font-size:30px;width:44px;text-align:center">{{ reps }}</div>
+              <div onClick="{{ incReps }}" style="font-size:16px;padding:10px 8px;cursor:pointer;color:oklch(0.6 0.01 250)">+</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:22px 24px 56px">
+          <button onClick="{{ completeSet }}" style="width:100%;padding:17px;background:oklch(0.68 0.14 250);border:none;border-radius:0;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:12.5px;letter-spacing:2px;font-weight:700;cursor:pointer">{{ logLabel }}</button>
+        </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PRIMARY = "oklch(0.68 0.19 29)";
+const SECONDARY = "oklch(0.5 0.13 29 / 0.85)";
+
+const MUSCLE_PATCHES = {
+  chest: [{ top: 50, left: 65, w: 70, h: 34, radius: "14px" }],
+  shoulders: [
+    { top: 44, left: 36, w: 26, h: 26, radius: "50%" },
+    { top: 44, left: 138, w: 26, h: 26, radius: "50%" },
+  ],
+  triceps: [
+    { top: 54, left: 36, w: 20, h: 50, radius: "10px", rot: -4 },
+    { top: 54, left: 144, w: 20, h: 50, radius: "10px", rot: 4 },
+  ],
+  abs: [{ top: 100, left: 72, w: 56, h: 46, radius: "14px" }],
+  quads: [
+    { top: 134, left: 70, w: 24, h: 60, radius: "12px", rot: -2 },
+    { top: 134, left: 106, w: 24, h: 60, radius: "12px", rot: 2 },
+  ],
+  calves: [
+    { top: 196, left: 73, w: 20, h: 56, radius: "10px", rot: -2 },
+    { top: 196, left: 107, w: 20, h: 56, radius: "10px", rot: 2 },
+  ],
+};
+
+const MUSCLE_LABELS = { chest: "Chest", shoulders: "Shoulders", triceps: "Triceps", abs: "Abs", quads: "Quads", calves: "Calves" };
+
+const EXERCISES = [
+  { name: "Barbell Bench Press", sets: "4 Sets \u00d7 8 Reps", totalSets: 4, primary: ["chest"], secondary: ["shoulders", "triceps"], last: "130 lb \u00d7 8" },
+  { name: "Incline Dumbbell Press", sets: "3 Sets \u00d7 10 Reps", totalSets: 3, primary: ["chest"], secondary: ["shoulders"], last: "55 lb \u00d7 10" },
+  { name: "Overhead Press", sets: "4 Sets \u00d7 8 Reps", totalSets: 4, primary: ["shoulders"], secondary: ["triceps"], last: "75 lb \u00d7 8" },
+  { name: "Lateral Raise", sets: "3 Sets \u00d7 15 Reps", totalSets: 3, primary: ["shoulders"], secondary: [], last: "20 lb \u00d7 15" },
+  { name: "Triceps Pushdown", sets: "3 Sets \u00d7 12 Reps", totalSets: 3, primary: ["triceps"], secondary: [], last: "45 lb \u00d7 12" },
+];
+
+function caption(ex) {
+  const p = ex.primary.map((m) => MUSCLE_LABELS[m]).join(", ");
+  const s = ex.secondary.map((m) => MUSCLE_LABELS[m]).join(", ");
+  return s ? `Primary: ${p}. Secondary: ${s}.` : `Primary: ${p}.`;
+}
+
+function patchesFor(ex) {
+  const list = [];
+  (ex.primary || []).forEach((m) => (MUSCLE_PATCHES[m] || []).forEach((p) => list.push({ ...p, color: PRIMARY, transform: p.rot ? `rotate(${p.rot}deg)` : "none" })));
+  (ex.secondary || []).forEach((m) => (MUSCLE_PATCHES[m] || []).forEach((p) => list.push({ ...p, color: SECONDARY, transform: p.rot ? `rotate(${p.rot}deg)` : "none" })));
+  return list;
+}
+
+class Component extends DCLogic {
+  state = { screen: "home", selected: 0, weight: 135, reps: 8, currentSet: 1, completedExercises: [], restActive: false, restRemaining: 0 };
+
+  componentWillUnmount() {
+    if (this.restInterval) clearInterval(this.restInterval);
+  }
+
+  startRest() {
+    if (this.restInterval) clearInterval(this.restInterval);
+    this.setState({ restActive: true, restRemaining: 60 });
+    this.restInterval = setInterval(() => {
+      this.setState((s) => {
+        if (s.restRemaining <= 1) {
+          clearInterval(this.restInterval);
+          return { restActive: false, restRemaining: 0 };
+        }
+        return { restRemaining: s.restRemaining - 1 };
+      });
+    }, 1000);
+  }
+
+  skipRest = () => {
+    if (this.restInterval) clearInterval(this.restInterval);
+    this.setState({ restActive: false, restRemaining: 0 });
+  };
+
+  renderVals() {
+    const exercises = EXERCISES.map((e, i) => ({
+      ...e,
+      num: String(i + 1).padStart(2, "0"),
+      caption: caption(e),
+      patches: patchesFor(e),
+      open: () => this.setState({ screen: "detail", selected: i }),
+      done: this.state.completedExercises.includes(i),
+    })).map((e) => ({
+      ...e,
+      marker: e.done ? "\u2713" : e.num,
+      numColor: e.done ? "oklch(0.68 0.14 250)" : "oklch(0.5 0.01 250)",
+      rowOpacity: e.done ? 0.55 : 1,
+    }));
+
+    const currentExercise = exercises[this.state.selected];
+    const completedCount = this.state.completedExercises.length;
+    const nextIndex = exercises.findIndex((e) => !e.done);
+
+    const setDots = Array.from({ length: currentExercise.totalSets }, (_, i) => ({
+      color: i < this.state.currentSet - 1 ? "oklch(0.68 0.14 250)" : i === this.state.currentSet - 1 ? "oklch(0.68 0.19 29)" : "oklch(0.28 0.01 250)",
+    }));
+
+    return {
+      exercises,
+      currentExercise,
+      completedCount,
+      progressColor: completedCount > 0 ? "oklch(0.68 0.14 250)" : "oklch(0.55 0.01 250)",
+      ctaLabel: completedCount >= 5 ? "SESSION COMPLETE" : nextIndex === this.state.selected ? "BEGIN SESSION \u2192" : "CONTINUE SESSION \u2192",
+      isHome: this.state.screen === "home",
+      isDetail: this.state.screen === "detail",
+      isSession: this.state.screen === "session",
+      isLogging: !this.state.restActive,
+      restActive: this.state.restActive,
+      restRemaining: this.state.restRemaining,
+      skipRest: this.skipRest,
+      setDots,
+      goHome: () => this.setState({ screen: "home" }),
+      goDetail: () => this.setState({ screen: "detail" }),
+      startNext: () => this.setState({ screen: "detail", selected: nextIndex >= 0 ? nextIndex : 0 }),
+      startSession: () => this.setState({ screen: "session", currentSet: 1 }),
+      currentSet: this.state.currentSet,
+      totalSets: currentExercise.totalSets,
+      weight: this.state.weight,
+      reps: this.state.reps,
+      logLabel: this.state.currentSet >= currentExercise.totalSets ? "FINISH EXERCISE" : "LOG SET",
+      incWeight: () => this.setState((s) => ({ weight: s.weight + 5 })),
+      decWeight: () => this.setState((s) => ({ weight: Math.max(0, s.weight - 5) })),
+      incReps: () => this.setState((s) => ({ reps: s.reps + 1 })),
+      decReps: () => this.setState((s) => ({ reps: Math.max(0, s.reps - 1) })),
+      completeSet: () => {
+        const total = currentExercise.totalSets;
+        const selected = this.state.selected;
+        if (this.state.currentSet >= total) {
+          this.setState((s) => ({
+            screen: "home",
+            currentSet: 1,
+            completedExercises: s.completedExercises.includes(selected) ? s.completedExercises : [...s.completedExercises, selected],
+          }));
+        } else {
+          this.setState((s) => ({ currentSet: s.currentSet + 1 }));
+          this.startRest();
+        }
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

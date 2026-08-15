@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:oklch(0.1 0.01 250);}
+  ::-webkit-scrollbar{display:none}
+  * { -ms-overflow-style:none; scrollbar-width:none; box-sizing:border-box; }
+</style>
+</helmet>
+<div style="display:flex;justify-content:center;font-family:'Fragment Mono',monospace">
+  <div style="width:390px;background:oklch(0.16 0.012 250);color:oklch(0.93 0.01 250);position:relative">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div style="padding:56px 28px 18px;text-align:center;border-bottom:1px solid oklch(0.28 0.01 250)">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:21px;letter-spacing:5px">REGIMEN</div>
+        <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);margin-top:8px;text-transform:uppercase">Friday, August 15</div>
+      </div>
+
+      <div style="padding:36px 28px 22px">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:42px;line-height:1.05">Push Day</div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:oklch(0.68 0.14 250);margin-top:12px;text-transform:uppercase">Chest &middot; Shoulders &middot; Triceps</div>
+      </div>
+
+      <div style="padding:0 28px">
+        <sc-for list="{{ exercises }}" as="ex" hint-placeholder-count="5">
+          <div onClick="{{ ex.open }}" style="display:flex;align-items:baseline;justify-content:space-between;padding:18px 0;border-top:1px solid oklch(0.24 0.01 250);cursor:pointer">
+            <div style="display:flex;align-items:baseline;gap:16px">
+              <div style="font-family:'Libre Caslon Text',serif;font-style:italic;font-size:20px;color:oklch(0.5 0.01 250);width:26px">{{ ex.num }}</div>
+              <div style="font-family:'Libre Caslon Text',serif;font-size:17px">{{ ex.name }}</div>
+            </div>
+            <div style="font-size:10.5px;color:oklch(0.55 0.01 250);letter-spacing:0.5px;white-space:nowrap">{{ ex.sets }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="padding:32px 28px 56px">
+        <div onClick="{{ startFirst }}" style="border-top:1px solid oklch(0.32 0.01 250);border-bottom:1px solid oklch(0.32 0.01 250);padding:17px 0;text-align:center;font-size:12px;letter-spacing:2.5px;color:oklch(0.68 0.14 250);cursor:pointer">BEGIN SESSION &rarr;</div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid oklch(0.24 0.01 250)">
+        <div onClick="{{ goHome }}" style="font-size:16px;cursor:pointer">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">{{ currentExercise.num }} / 05</div>
+      </div>
+
+      <div style="padding:32px 24px 0">
+        <div style="font-family:'Libre Caslon Text',serif;font-size:33px;line-height:1.1">{{ currentExercise.name }}</div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:oklch(0.68 0.14 250);margin-top:10px;text-transform:uppercase">{{ currentExercise.sets }}</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;padding:30px 24px 8px">
+        <div style="width:200px;height:268px;position:relative;background:radial-gradient(ellipse at 50% 30%, oklch(0.22 0.01 250), oklch(0.15 0.01 250) 75%)">
+          <div style="position:absolute;left:45px;top:254px;width:110px;height:14px;border-radius:50%;background:oklch(0.08 0.01 250 / 0.6);filter:blur(4px)"></div>
+          <sc-for list="{{ mannequinParts }}" as="p" hint-placeholder-count="18">
+            <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:{{ p.shadow }};transform:{{ p.transform }};transition:background 0.3s, box-shadow 0.3s"></div>
+          </sc-for>
+        </div>
+        <div style="font-family:'Libre Caslon Text',serif;font-style:italic;font-size:12.5px;color:oklch(0.6 0.01 250);text-align:center;max-width:260px;margin-top:18px;line-height:1.5">{{ currentExercise.caption }}</div>
+      </div>
+
+      <div style="padding:36px 24px 56px">
+        <button onClick="{{ startSession }}" style="width:100%;padding:17px;background:oklch(0.68 0.14 250);border:none;border-radius:0;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:12.5px;letter-spacing:2px;font-weight:700;cursor:pointer">START EXERCISE</button>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid oklch(0.24 0.01 250)">
+        <div onClick="{{ goDetail }}" style="font-size:16px;cursor:pointer">&larr;</div>
+        <div style="font-size:11px;letter-spacing:2px;color:oklch(0.55 0.01 250);white-space:nowrap">SET {{ currentSet }} / {{ totalSets }}</div>
+      </div>
+
+      <div style="padding:26px 24px 0;font-family:'Libre Caslon Text',serif;font-size:24px">{{ currentExercise.name }}</div>
+
+      <div style="display:flex;justify-content:center;padding:20px 24px 10px;transform:scale(0.72);transform-origin:top center;margin-bottom:-60px">
+        <div style="width:200px;height:268px;position:relative;background:radial-gradient(ellipse at 50% 30%, oklch(0.22 0.01 250), oklch(0.15 0.01 250) 75%)">
+          <div style="position:absolute;left:45px;top:254px;width:110px;height:14px;border-radius:50%;background:oklch(0.08 0.01 250 / 0.6);filter:blur(4px)"></div>
+          <sc-for list="{{ mannequinParts }}" as="p" hint-placeholder-count="18">
+            <div style="position:absolute;top:{{ p.top }}px;left:{{ p.left }}px;width:{{ p.w }}px;height:{{ p.h }}px;border-radius:{{ p.radius }};background:{{ p.color }};box-shadow:{{ p.shadow }};transform:{{ p.transform }};transition:background 0.3s, box-shadow 0.3s"></div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;padding:24px;margin-top:16px">
+        <div style="flex:1;text-align:center;border-right:1px solid oklch(0.28 0.01 250)">
+          <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Weight</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px">
+            <div onClick="{{ decWeight }}" style="font-size:16px;padding:6px 4px;cursor:pointer;color:oklch(0.6 0.01 250)">&minus;</div>
+            <div style="font-family:'Libre Caslon Text',serif;font-size:30px;width:56px;text-align:center">{{ weight }}</div>
+            <div onClick="{{ incWeight }}" style="font-size:16px;padding:6px 4px;cursor:pointer;color:oklch(0.6 0.01 250)">+</div>
+          </div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;letter-spacing:2px;color:oklch(0.55 0.01 250);text-transform:uppercase;margin-bottom:10px">Reps</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px">
+            <div onClick="{{ decReps }}" style="font-size:16px;padding:6px 4px;cursor:pointer;color:oklch(0.6 0.01 250)">&minus;</div>
+            <div style="font-family:'Libre Caslon Text',serif;font-size:30px;width:44px;text-align:center">{{ reps }}</div>
+            <div onClick="{{ incReps }}" style="font-size:16px;padding:6px 4px;cursor:pointer;color:oklch(0.6 0.01 250)">+</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:8px 24px 56px">
+        <button onClick="{{ completeSet }}" style="width:100%;padding:17px;background:oklch(0.68 0.14 250);border:none;border-radius:0;color:oklch(0.12 0.01 250);font-family:'Fragment Mono',monospace;font-size:12.5px;letter-spacing:2px;font-weight:700;cursor:pointer">LOG SET</button>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PRIMARY = "oklch(0.68 0.19 29)";
+const SECONDARY = "oklch(0.5 0.13 29)";
+const BASE = "oklch(0.32 0.02 250)";
+
+const PART_DEFS = [
+  { key: "shoulder-L", top: 46, left: 40, w: 22, h: 22, radius: "50%" },
+  { key: "shoulder-R", top: 46, left: 138, w: 22, h: 22, radius: "50%" },
+  { key: "upperarm-L", top: 54, left: 34, w: 18, h: 58, radius: 9, rot: -6 },
+  { key: "upperarm-R", top: 54, left: 148, w: 18, h: 58, radius: 9, rot: 6 },
+  { key: "forearm-L", top: 106, left: 30, w: 16, h: 52, radius: 8, rot: -4 },
+  { key: "forearm-R", top: 106, left: 154, w: 16, h: 52, radius: 8, rot: 4 },
+  { key: "hand-L", top: 152, left: 28, w: 14, h: 14, radius: "50%" },
+  { key: "hand-R", top: 152, left: 158, w: 14, h: 14, radius: "50%" },
+  { key: "thigh-L", top: 132, left: 74, w: 26, h: 66, radius: 12 },
+  { key: "thigh-R", top: 132, left: 100, w: 26, h: 66, radius: 12 },
+  { key: "calf-L", top: 192, left: 77, w: 20, h: 58, radius: 10 },
+  { key: "calf-R", top: 192, left: 103, w: 20, h: 58, radius: 10 },
+  { key: "foot-L", top: 248, left: 72, w: 24, h: 10, radius: 5 },
+  { key: "foot-R", top: 248, left: 98, w: 24, h: 10, radius: 5 },
+  { key: "abs", top: 94, left: 69, w: 62, h: 44, radius: 14 },
+  { key: "chest", top: 50, left: 55, w: 90, h: 52, radius: 16 },
+  { key: "neck", top: 40, left: 92, w: 16, h: 12, radius: 4 },
+  { key: "head", top: 4, left: 80, w: 40, h: 40, radius: "50%" },
+];
+
+const MUSCLE_PARTS = {
+  chest: ["chest"],
+  shoulders: ["shoulder-L", "shoulder-R"],
+  triceps: ["upperarm-L", "upperarm-R"],
+  abs: ["abs"],
+  quads: ["thigh-L", "thigh-R"],
+  calves: ["calf-L", "calf-R"],
+};
+
+const MUSCLE_LABELS = { chest: "Chest", shoulders: "Shoulders", triceps: "Triceps", abs: "Abs", quads: "Quads", calves: "Calves" };
+
+const EXERCISES = [
+  { name: "Barbell Bench Press", sets: "4 Sets \u00d7 8 Reps", totalSets: 4, primary: ["chest"], secondary: ["shoulders", "triceps"] },
+  { name: "Incline Dumbbell Press", sets: "3 Sets \u00d7 10 Reps", totalSets: 3, primary: ["chest"], secondary: ["shoulders"] },
+  { name: "Overhead Press", sets: "4 Sets \u00d7 8 Reps", totalSets: 4, primary: ["shoulders"], secondary: ["triceps"] },
+  { name: "Lateral Raise", sets: "3 Sets \u00d7 15 Reps", totalSets: 3, primary: ["shoulders"], secondary: [] },
+  { name: "Triceps Pushdown", sets: "3 Sets \u00d7 12 Reps", totalSets: 3, primary: ["triceps"], secondary: [] },
+];
+
+function caption(ex) {
+  const p = ex.primary.map((m) => MUSCLE_LABELS[m]).join(", ");
+  const s = ex.secondary.map((m) => MUSCLE_LABELS[m]).join(", ");
+  return s ? `Primary: ${p}. Secondary: ${s}.` : `Primary: ${p}.`;
+}
+
+class Component extends DCLogic {
+  state = { screen: "home", selected: 0, weight: 135, reps: 8, currentSet: 1 };
+
+  buildMannequinParts(exercise) {
+    const highlighted = {};
+    (exercise.primary || []).forEach((m) => (MUSCLE_PARTS[m] || []).forEach((p) => (highlighted[p] = PRIMARY)));
+    (exercise.secondary || []).forEach((m) => (MUSCLE_PARTS[m] || []).forEach((p) => { if (!highlighted[p]) highlighted[p] = SECONDARY; }));
+
+    return PART_DEFS.map((p) => ({
+      ...p,
+      color: highlighted[p.key] || BASE,
+      shadow: highlighted[p.key] ? `0 0 16px ${highlighted[p.key]}` : "inset 0 0 0 1px oklch(0.4 0.02 250 / 0.5)",
+      transform: p.rot ? `rotate(${p.rot}deg)` : "none",
+    }));
+  }
+
+  renderVals() {
+    const exercises = EXERCISES.map((e, i) => ({ ...e, num: String(i + 1).padStart(2, "0"), caption: caption(e), open: () => this.setState({ screen: "detail", selected: i }) }));
+    const currentExercise = exercises[this.state.selected];
+
+    return {
+      exercises,
+      currentExercise,
+      isHome: this.state.screen === "home",
+      isDetail: this.state.screen === "detail",
+      isSession: this.state.screen === "session",
+      goHome: () => this.setState({ screen: "home" }),
+      goDetail: () => this.setState({ screen: "detail" }),
+      startFirst: () => this.setState({ screen: "detail", selected: 0 }),
+      startSession: () => this.setState({ screen: "session", currentSet: 1 }),
+      mannequinParts: this.buildMannequinParts(currentExercise),
+      currentSet: this.state.currentSet,
+      totalSets: currentExercise.totalSets,
+      weight: this.state.weight,
+      reps: this.state.reps,
+      incWeight: () => this.setState((s) => ({ weight: s.weight + 5 })),
+      decWeight: () => this.setState((s) => ({ weight: Math.max(0, s.weight - 5) })),
+      incReps: () => this.setState((s) => ({ reps: s.reps + 1 })),
+      decReps: () => this.setState((s) => ({ reps: Math.max(0, s.reps - 1) })),
+      completeSet: () =>
+        this.setState((s) => {
+          if (s.currentSet >= currentExercise.totalSets) return { screen: "detail" };
+          return { currentSet: s.currentSet + 1 };
+        }),
+    };
+  }
+}
+</script>
+</body>
+</html>
