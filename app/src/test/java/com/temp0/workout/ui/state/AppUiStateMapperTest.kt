@@ -55,7 +55,9 @@ class AppUiStateMapperTest {
 
         assertEquals("✓", state.home.exercises[0].marker)
         assertTrue(state.home.exercises[0].isDone)
-        assertEquals("01", state.home.exercises[1].marker)
+        // Marker numbering is absolute position (index + 1), not renumbered among the
+        // remaining undone exercises — matches REGIMEN.dc.html's `num: String(i + 1)...`.
+        assertEquals("02", state.home.exercises[1].marker)
     }
 
     @Test
